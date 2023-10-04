@@ -66,11 +66,13 @@ class Account(AbstractBaseUser):
 
 
 
-# class Profile(models.Model):
-#     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     avatar = models.ImageField(upload_to='accounts/profile', blank=True)
-#     bio = models.CharField(max_length=200, blank=True)
-#
-#     def __str__(self):
-#         return self.user.email
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to='accounts/profile', blank=True)
+    bio = models.CharField(max_length=200, blank=True)
+    frist_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.user.email
 
