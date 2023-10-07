@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Post,Comment,LikeDislike,Bookmark,Tag
+from .models import Post,Tag,Comment,LikeDislike
 # Register your models here.
+
 admin.site.register(Post)
+admin.site.register(Tag)
 admin.site.register(Comment)
 admin.site.register(LikeDislike)
-admin.site.register(Bookmark)
-admin.site.register(Tag)
