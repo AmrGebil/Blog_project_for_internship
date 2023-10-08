@@ -1,10 +1,11 @@
 
 from django.shortcuts import get_object_or_404
-from rest_framework import permissions, status, viewsets
+from rest_framework import permissions, status, viewsets, generics
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Tag, Comment, Post,LikeDislike
-from .serializers import TagReadSerializer, CommentReadSerializer,CommentWriteSerializer, PostReadSerializer, PostWriteSerializer,LikeDislikeWriteSerializer,LikeDislikeReadSerializer
+from .models import Tag, Comment, Post,LikeDislike,Bookmark
+from .serializers import TagReadSerializer, CommentReadSerializer,CommentWriteSerializer, PostReadSerializer, PostWriteSerializer,LikeDislikeWriteSerializer,LikeDislikeReadSerializer,BookmarkSerializer,BookmarkCreateSerializer
 from .permissions import IsAuthorOrReadOnly
 
 # Category is going to be read-only, so we use ReadOnlyModelViewSet
@@ -74,27 +75,6 @@ class CommentViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user, post=post)
 
 # Here, we are using the normal APIView class
-class LikePostAPIView(APIView):
-    """
-    Like, Dislike a post
-    """
-
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get(self, request, pk):
-        user = request.user
-        post = get_object_or_404(Post, pk=pk)
-
-        if user in post.likes.all():
-            post.likes.remove(user)
-
-        else:
-            post.likes.add(user)
-
-        return Response(status=status.HTTP_200_OK)
-
-
-
 class LikeDislikeViewSet(viewsets.ModelViewSet):
     """
     CRUD comments for a particular post
@@ -127,3 +107,26 @@ class LikeDislikeViewSet(viewsets.ModelViewSet):
         post_id = self.kwargs.get("post_id")
         post = get_object_or_404(Post, pk=post_id)  # You should import the Post model
         serializer.save(post=post, user=self.request.user)
+
+
+
+
+class BookmarkCreateView(APIView):
+    def post(self, request, format=None):
+        serializer = BookmarkCreateSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BookmarkDeleteView(generics.DestroyAPIView):
+    queryset = Bookmark.objects.all()
+    serializer_class = BookmarkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class BookmarkListView(generics.ListAPIView):
+    serializer_class = BookmarkSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Bookmark.objects.filter(user=self.request.user)
