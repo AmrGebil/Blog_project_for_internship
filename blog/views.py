@@ -1,4 +1,3 @@
-
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status, viewsets, generics
 from rest_framework.decorators import api_view
@@ -39,6 +38,7 @@ class PostViewSet(viewsets.ModelViewSet):
             self.permission_classes = (permissions.AllowAny,)
 
         return super().get_permissions()
+
 
 
 class CommentViewSet(viewsets.ModelViewSet):

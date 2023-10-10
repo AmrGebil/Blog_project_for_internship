@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'blog',
     'rest_framework',
     'rest_framework.authtoken',
+    'silk'
 
     
 ]
@@ -59,6 +60,7 @@ REST_FRAMEWORK = {
 
 
 MIDDLEWARE = [
+    'silk.middleware.SilkyMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

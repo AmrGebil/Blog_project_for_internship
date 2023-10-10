@@ -99,10 +99,10 @@ class PostReadSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_Tags(self, obj):
-        categories = list(
+        tags = list(
             cat.name for cat in obj.Tags.get_queryset().only("name")
         )
-        return categories
+        return tags
 
 
     def get_likes_count(self, obj):
