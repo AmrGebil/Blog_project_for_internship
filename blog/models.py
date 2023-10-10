@@ -58,7 +58,7 @@ class LikeDislike(models.Model):
     is_like = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.user.username} {'liked' if self.is_like else 'disliked'} {self.post.title}"
+        return f"{self.author.username} {'liked' if self.is_like else 'disliked'} {self.post.title}"
 
 class Bookmark(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
