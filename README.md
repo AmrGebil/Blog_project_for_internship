@@ -13,11 +13,13 @@ This project is a blog API built using Django Rest Framework.
 
 ## Usage
 
--Access the Django admin interface at http://localhost:8000/admin/ and log in with the superuser credentials created in step 5.
+- Access the Django admin interface at http://localhost:8000/admin/ and log in with the superuser credentials created in step 5.
 
-Use API endpoints to interact with the blog data. See API Endpoints for details.
+- Use API endpoints to interact with the blog data. See API Endpoints for details.
 
--The API provides the following endpoints:
+## API Endpoints
+
+- The API provides the following endpoints:
 
 - `/`: Returns user information.
 - `/register/`:  Creates a user account.
