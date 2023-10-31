@@ -4,12 +4,20 @@ This project is a blog API built using Django Rest Framework.
 ## Installation
 
 1. Clone the repository.
-2. Install the dependencies using `pip install -r requirements.txt`.
-3. Run the server using `python manage.py runserver`.
+2. python -m venv venv.
+3. source venv/bin/activate.
+4. Install the dependencies using `pip install -r requirements.txt`.
+5. python manage.py migrate.
+6. python manage.py createsuperuser
+7. python manage.py runserver
 
 ## Usage
 
-The API provides the following endpoints:
+-Access the Django admin interface at http://localhost:8000/admin/ and log in with the superuser credentials created in step 5.
+
+Use API endpoints to interact with the blog data. See API Endpoints for details.
+
+-The API provides the following endpoints:
 
 - `/`: Returns user information.
 - `/register/`:  Creates a user account.
