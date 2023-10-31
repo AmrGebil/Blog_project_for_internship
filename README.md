@@ -11,17 +11,19 @@ This project is a blog API built using Django Rest Framework.
 
 The API provides the following endpoints:
 
-- `http://127.0.0.1:8000/`: Returns a list of all posts.
-- `/register/`: create user account 
-- `/login/`: user login and return token
-- `/logout/`: user logout
-  
-- `/posts/`: Returns a list of all posts.
-- `/posts/<id>/`: Returns a specific post.
-- `/authors/`: Returns a list of all authors.
+- `http://127.0.0.1:8000/`: Returns  user info.
+- `/register/`: create user account. 
+- `/login/`: user login and return token.
+- `/logout/`: user logout.
+- `/profile/`: Returns,edit and delete user profile
+- `/post/`: create and Returns a list of all posts.
+- `/posts/<id>/`: Returns a specific post and edite or delete it.
+- `/post/Tags/`: Returns a list of tags
+- `/post/<id>/comment`: Returns list and create comments.
+    
 - `/authors/<id>/`: Returns a specific author.
   
 - `/posts/`: Returns a list of all posts.
-- `/posts/<id>/`: Returns a specific post.
+- `/post/<id>/comment`: Returns a specific post.
 - `/authors/`: Returns a list of all authors.
 - `/authors/<id>/`: Returns a specific author.
