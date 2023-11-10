@@ -7,7 +7,13 @@ from .models import Tag, Comment, Post,LikeDislike,Bookmark
 from .serializers import TagReadSerializer, CommentReadSerializer,CommentWriteSerializer, PostReadSerializer, PostWriteSerializer,LikeDislikeWriteSerializer,LikeDislikeReadSerializer,BookmarkSerializer,BookmarkCreateSerializer
 from .permissions import IsAuthorOrReadOnly
 from django.core.mail import send_mail
-# Category is going to be read-only, so we use ReadOnlyModelViewSet
+from django_rq import enqueue
+from .jobs import send_email_job
+
+
+
+
+
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
     List and Retrieve post categories
@@ -43,13 +49,9 @@ class PostViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             post = serializer.save()
-            send_mail(
-                subject='New Post Created',
-                message=f'A new post with the title "{post.title}" has been created,you can approve or reject it  ',
-                from_email='blogporject@example.com',
-                recipient_list=['amrgebil@example.com','mohammed@gmail.com'],
-                fail_silently=False,
-            )
+
+            enqueue(send_email_job, post.id)
+
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
