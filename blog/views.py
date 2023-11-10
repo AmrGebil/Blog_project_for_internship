@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from .models import Tag, Comment, Post,LikeDislike,Bookmark
 from .serializers import TagReadSerializer, CommentReadSerializer,CommentWriteSerializer, PostReadSerializer, PostWriteSerializer,LikeDislikeWriteSerializer,LikeDislikeReadSerializer,BookmarkSerializer,BookmarkCreateSerializer
 from .permissions import IsAuthorOrReadOnly
-
+from django.core.mail import send_mail
 # Category is going to be read-only, so we use ReadOnlyModelViewSet
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -20,15 +20,14 @@ class PostViewSet(viewsets.ModelViewSet):
     """
     CRUD posts
     """
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(is_approval=True)
     def get_serializer_class(self):
-        if self.action in ("create", "update", "partial_update", "destroy"):
+        if self.action in ( "update", "partial_update", "destroy"):
             return PostWriteSerializer
 
         return PostReadSerializer
 
-    # get_permissions(self) method helps you separate
-    # permissions for different actions inside the same view.
+
     def get_permissions(self):
         if self.action in ("create",):
             self.permission_classes = (permissions.IsAuthenticated,)
@@ -39,6 +38,21 @@ class PostViewSet(viewsets.ModelViewSet):
 
         return super().get_permissions()
 
+    def create(self, request, *args, **kwargs):
+        serializer = PostWriteSerializer(data=request.data , context={'request': request})
+
+        if serializer.is_valid():
+            post = serializer.save()
+            send_mail(
+                subject='New Post Created',
+                message=f'A new post with the title "{post.title}" has been created,you can approve or reject it  ',
+                from_email='blogporject@example.com',
+                recipient_list=['amrgebil@example.com','mohammed@gmail.com'],
+                fail_silently=False,
+            )
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class CommentViewSet(viewsets.ModelViewSet):

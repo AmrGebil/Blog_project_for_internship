@@ -20,6 +20,7 @@ class Post(models.Model):
     body = models.TextField("Post body")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_approval=models.BooleanField(default=False)
 
     class Meta:
         ordering = ("-created_at",)

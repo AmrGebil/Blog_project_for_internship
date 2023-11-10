@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
-
+from django.core.mail import send_mail
 from .models import Tag, Comment, Post,LikeDislike,Bookmark
 
 class TagReadSerializer(serializers.ModelSerializer):
@@ -130,4 +130,18 @@ class PostWriteSerializer(serializers.ModelSerializer):
         model = Post
         fields = "__all__"
 
+    # def create(self, validated_data):
+    #     # Create the post instance
+    #     post = Post.objects.create(**validated_data)
+    #
+    #     # Send an email when a new post is created
+    #     send_mail(
+    #         subject='New Post Created',
+    #         message=f'A new post with the title "{post.title}" has been created.',
+    #         from_email='your_email@example.com',  # Replace with the sender's email address
+    #         recipient_list=['recipient@example.com'],  # Replace with the recipient's email address
+    #         fail_silently=False,
+    #     )
+    #
+    #     return post
 
