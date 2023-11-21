@@ -50,7 +50,7 @@ class PostViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             post = serializer.save()
 
-            enqueue(send_email_job, post.id)
+            enqueue(send_email_job, post)
 
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 

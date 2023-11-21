@@ -1,7 +1,7 @@
 
 from django.conf import settings
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser,BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser,BaseUserManager,PermissionsMixin
 
 # Create your models here.
 
@@ -36,7 +36,7 @@ class MyAccountManager(BaseUserManager):
 
 
 
-class Account(AbstractBaseUser):
+class Account(AbstractBaseUser,PermissionsMixin):
     username= models.CharField(max_length=50,unique=True)
     email = models.EmailField(max_length=100,unique=True)
 
@@ -52,6 +52,20 @@ class Account(AbstractBaseUser):
     REQUIRED_FIELDS = ['username',]
 
     objects=MyAccountManager()
+
+
+    def get_all_permissions(self, obj=None):
+        if not self.is_active:
+            return set()
+
+        if obj is not None and self.is_anonymous:
+            return set()
+
+        if obj is not None:
+            # Ensure that self.get_group_permissions(obj) returns a queryset
+            return self.user_permissions.all() | self.get_group_permissions(obj).all()
+
+        return self.user_permissions.all() | self.get_group_permissions(obj)
 
     def __str__(self):
         return self.email

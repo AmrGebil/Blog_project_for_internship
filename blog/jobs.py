@@ -2,9 +2,8 @@ from django.core.mail import send_mail
 from django_rq import job
 from .models import Post
 
-@job
-def send_email_job(post_id):
-    post = Post.objects.get(pk=post_id)
+@job(timeout=300)
+def send_email_job(post):
 
     send_mail(
         subject='New Post Created',
